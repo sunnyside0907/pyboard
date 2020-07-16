@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Detail / Update Page</title>
+<script>
+function home(){
+	location.href="/";
+}
+function update(){
+	document.forms["form1"].action="update";
+	document.forms["form1"].submit();
+}
+function del(){
+	if(confirm('삭제하시겠습니까?')){
+		document.forms["form1"].action="delete";
+		document.forms["form1"].submit();
+	}
+}
+</script>
+</head>
+<body>
+<h2>게시물 편집</h2>
+<form id="form1" name="form1" method="post" action="insert" enctype="multipart/form-data">
+<table border="1" width="700px">
+	<tr><td>조회수</td><td>{{dto.hit}}</td></tr>
+	<tr><td>이름</td><td><input name="writer" value="{{dto.writer}}"></td></tr>
+	<tr><td>제목</td><td><input name="title" value="{{dto.title}}"></td></tr>
+	<tr><td>날짜</td><td>{{dto.post_date}}</td></tr>
+	<tr><td>내용</td><td><textarea rows="10" cols="60" name="content">{{dto.content}}</textarea></td></tr>
+	<tr><td>첨부파일</td>
+		<td>
+			{% if dto.filesize > 0 %}
+				<a href="download?idx={{dto.idx}}">
+				{{dto.filename}} ({{filesize}}KB)</a>
+			{% endif %}
+			<input type="file" name="file">
+		</td>
+	</tr>
+	
+	<tr><td colspan="2" align="center">
+		<input type="hidden" name="idx" value="{{dto.idx}}">
+		<input type="button" value="목록" onclick="home()">
+		<input type="button" value="수정" onclick="update()">
+		<input type="button" value="삭제" onclick="del()"></td>
+	</tr>
+</table>
+</form>
+<form name="form1" method="post" action="reply_insert">
+{% csrf_token %}
+	<input name="writer" placeholder="이름"><br>
+	<textarea rows="5" cols="80" name="content" placeholder="댓글을 입력하세요"></textarea>
+	<input type="hidden" name="idx" value="{{dto.idx}}">
+	<button>댓글쓰기</button>
+</form>
+<h3>댓글목록</h3>
+<table border="1" width="700px">
+	{% for row in commentList %}
+	<tr><td>
+	<b>{{row.writer}}</b> ({{row.post_date}})<br>
+	{{ row.content }}
+	</td></tr>
+	{% endfor %}
+</table>
+
+</body>
+</html>

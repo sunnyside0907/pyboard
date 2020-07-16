@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>게시판</title>
+<style>
+  table {
+    width: 70%;
+    border: 1px solid #444444;
+  }
+  th, td {
+    border: 1px solid #444444;
+    padding: 10px;
+  }
+</style>
+</head>
+<body>
+<h2><a href="/">게시판</a></h2>
+<form method="post">
+	{% csrf_token %}	<!-- 크로스사이트스크립팅 공격방지코드 -->
+		<select name="search_option">
+	{% if search_option == "writer" %}
+		<option value="writer" selected>이름</option>
+		<option value="title">제목</option>
+		<option value="content">내용</option>
+		<option value="all">이름+제목+내용</option>
+	{% elif search_option == "title" %}
+		<option value="writer">이름</option>
+		<option value="title" selected>제목</option>
+		<option value="content">내용</option>
+		<option value="all">이름+제목+내용</option>
+	{% elif search_option == "content" %}
+		<option value="writer">이름</option>
+		<option value="title">제목</option>
+		<option value="content" selected>내용</option>
+		<option value="all">이름+제목+내용</option>
+	{% elif search_option == "all" %}
+		<option value="writer">이름</option>
+		<option value="title">제목</option>
+		<option value="content">내용</option>
+		<option value="all" selected>이름+제목+내용</option>
+	{% else %}
+		<option selected>선택하세요</option>
+		<option value="writer">이름</option>
+		<option value="title">제목</option>
+		<option value="content">내용</option>
+		<option value="all">이름+제목+내용</option>
+	{% endif %}
+		</select>
+	<input type="text" name="search" value="{{search}}">
+	<input type="submit" value="검색">
+</form>
+
+게시물수 : {{ boardCount }}<br>
+	<a href="write">글쓰기</a>
+	<table border="1">
+		<tr style="background-color: yellow">
+			<th>번호</th>
+			<th>이름</th>
+			<th>제목</th>
+			<th>날짜</th>
+			<th>조회수</th>
+			<th>첨부파일</th>
+			<th>다운로드</th>
+		</tr>
+		{% if boardList %}
+		{% for row in boardList %}
+		<tr align="center">
+			<td>{{row.idx}}</td>
+			<td>{{row.writer}}</td>
+			<td><a href="detail?idx={{row.idx}}">{{row.title}}</a></td>
+			<td>{{row.post_date|date:"Y-m-d"}}</td>
+			<td>{{row.hit}}</td>
+			<td>
+				{% if row.filesize > 0 %}<a href="download?idx={{row.idx}}">
+				<image src="{% static "images/file.png" %}"></a>
+				{% endif %}
+			</td>
+			<td>{{row.down}}</td>
+		{% endfor %}
+		{% endif %}
+		</tr>
+		<tr>
+		 <td colspan="10" align="center">
+		  <div class="pagination">
+  			<span class="step-links">
+			        {% if contacts.has_previous %}
+   			         <a href="?page=1">&laquo; 처음</a>
+    			         <a href="?page={{ contacts.previous_page_number }}">이전</a>
+  			        {% endif %}
+
+      			        {% for i in p_range %}
+           			        <a href="?page={{i}}" {% if contacts.number == i %}class="active" {% endif %}>{{i}}</a>
+       			        {% endfor %}
+
+       			        {% if contacts.has_next %}
+            		        <a href="?page={{ contacts.next_page_number }}">다음</a>
+        			        <a href="?page={{ contacts.paginator.num_pages }}">끝 &raquo;</a>
+      			        {% endif %}
+ 			   </span>
+	 	 </div>
+		</td>
+		</tr>
+
+	</table>
+
+</body>
+
+</html>
