@@ -52,26 +52,23 @@ def list(request):
         start = 0
 
     page_size = 1000
-    block_size = 10
-    end = start+page_size
-
+    end = start + page_size
 
     if search_option == "all":
         boardList = Board.objects.filter(
             Q(writer__contains=search) | Q(title__contains=search) | Q(content__contains=search)
-            ).order_by('-idx')[start:end]
+        ).order_by('-idx')[start:end]
     elif search_option == "writer":
-        boardList = Board.objects.filter(writer__contains = search).order_by('-idx')[start:end]
+        boardList = Board.objects.filter(writer__contains=search).order_by('-idx')[start:end]
     elif search_option == "title":
-        boardList = Board.objects.filter(title__contains = search).order_by('-idx')[start:end]
+        boardList = Board.objects.filter(title__contains=search).order_by('-idx')[start:end]
     elif search_option == "content":
-        boardList = Board.objects.filter(content__contains = search).order_by('-idx')[start:end]
+        boardList = Board.objects.filter(content__contains=search).order_by('-idx')[start:end]
     else:
         boardList = Board.objects.all().order_by('-idx')[start:end]
 
-
     # 페이지 네이션
-    paginator = Paginator(boardList,5)
+    paginator = Paginator(boardList, 5)
     try:
         page = request.GET.get('page')
     except:
@@ -83,18 +80,19 @@ def list(request):
     except EmptyPage:
         boardList = paginator.page(paginator.num_pages)
 
-    contacts = paginator.get_page(page)    
+    contacts = paginator.get_page(page)
     page_range = 5
-    current_block = math.ceil((start+1)/page_range)
-    if contacts.number > 5 :
-        start_block =  (current_block-1)*page_range+5
+    max_index = paginator.num_pages
+    current_page = int(page) if page else 1
+    start_index =  int((current_page-1)/page_range) * page_range
+    end_index = start_index + page_range
 
-    else :
-        start_block =  (current_block-1)*page_range
-    end_block = start_block + page_range
-    p_range = paginator.page_range[start_block:end_block]
+    print(current_page,start_index,end_index,max_index)
+    if end_index >= max_index :
+        end_index = max_index
+    p_range = paginator.page_range[start_index:end_index]
 
-    
+
     return render(request, "list.html",
                   {"boardList":boardList, "boardCount":boardCount, "search_option":search_option, "search":search,
                    'contacts':contacts, 'p_range':p_range,

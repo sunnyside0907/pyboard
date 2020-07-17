@@ -7,5 +7,13 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/db.sqlite3</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="Django default" uuid="ee5a0a00-5f85-4a7a-afb0-6c8740749e36">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/pyboard/settings.py</remarks>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://Localhost:3306/board_py</jdbc-url>
+    </data-source>
   </component>
 </project>
