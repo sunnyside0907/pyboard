@@ -36,7 +36,7 @@ function del(){
 <form id="form1" name="form1" method="post" action="insert" enctype="multipart/form-data">
 <table border="1" width="700px" style="align-content: center">
 	<tr><td>조회수</td><td>{{dto.hit}}</td></tr>
-	<tr><td>이름</td><td><input name="writer" value="{{dto.writer}}"></td></tr>
+	<tr><td>작성자</td><td><input name="writer" value="{{dto.writer}}"></td></tr>
 	<tr><td>제목</td><td><input name="title" value="{{dto.title}}"></td></tr>
 	<tr><td>날짜</td><td>{{dto.post_date}}</td></tr>
     <tr><td>분류</td><td>
@@ -185,7 +185,7 @@ function del(){
 </form>
 <form name="form1" method="post" action="reply_insert">
 {% csrf_token %}
-	<input name="writer" placeholder="이름"><br>
+	<input name="writer" placeholder="작성자"><br>
 	<textarea rows="5" cols="80" name="content" placeholder="댓글을 입력하세요"></textarea>
 	<input type="hidden" name="idx" value="{{dto.idx}}">
 	<button>댓글쓰기</button>

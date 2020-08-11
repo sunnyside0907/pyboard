@@ -10,7 +10,7 @@
 
 <form id="form1" name="form1" method="post" action="insert" enctype="multipart/form-data">
 	{% csrf_token %}
-	<div> 이름 <input name="writer" size="80" placeholder="이름을 입력하세요"></div>
+	<div> 작성자 <input name="writer" size="80" placeholder="이름을 입력하세요"></div>
 	<div> 제목 <input name="title" size="80" placeholder="제목을 입력하세요" value="{{ title }}"></div>
     <div> URL <input name="video_url" size="80" placeholder="url을 입력하세요" value="https://youtu.be/{{ video_id }}"></div>
     <div>
@@ -36,7 +36,10 @@
     </div>
 	<div> 내용 <textarea name="content" cols="80" rows="3" placeholder="내용을 입력하세요">{{ description }}</textarea></div>
 	<div style ="width:800px;"> 첨부파일 <input type="file" name="file"></div>
-	<div style ="width:700px; text-align: center;"><button type="submit" id="btnSave">확인</button></div>
+	<div style ="width:700px; text-align: center;">
+        <button type="submit" id="btnSave">확인</button>
+        <button type="button" onclick="location.href='/search_youtube'" >돌아가기</button>
+    </div>
 </form>
 </body>
 </html>

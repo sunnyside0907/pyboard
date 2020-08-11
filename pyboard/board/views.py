@@ -258,8 +258,11 @@ def reply_insert(request):
 
 
 # 검색하기
+# api 1 : AIzaSyDASAZfOrimhTwQ1g5F-4XquL_9uVT0n9Q
+# api 2 : AIzaSyCdFvZiU0BvUPE8sor8Os9ZdkiBA3DvhFY
+# api 3 : AIzaSyDaxVz4EWlhHvJH1VaQIv0P85rpEXyYNSU
 def search_youtube(request):
-    API_KEY = "AIzaSyCdFvZiU0BvUPE8sor8Os9ZdkiBA3DvhFY"
+    API_KEY = "AIzaSyDASAZfOrimhTwQ1g5F-4XquL_9uVT0n9Q"
     YOUTUBE_API_SERVICE_NAME = "youtube"
     YOUTUBE_API_VERSION = "v3"
 
