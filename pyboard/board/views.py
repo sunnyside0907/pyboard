@@ -133,10 +133,10 @@ def insert(request):
                 video_url=request.POST["video_url"],
                 section_school=request.POST["section_school"],
                 section_subject=request.POST["section_subject"],
-                section_semester=request.POST["section_semester"]
+                section_semester=request.POST["section_semester"],
+                grade=request.POST["grade"]
                 )
     dto.save()
-    print(dto)
 
     return redirect("/")
 
@@ -223,7 +223,7 @@ def update(request):
                     section_school=request.POST["section_school"],
                     section_subject=request.POST["section_subject"],
                     section_semester=request.POST["section_semester"],
-
+                    grade=request.POST["grade"]
                     )
     dto_new.save()  # update query 호출
 
