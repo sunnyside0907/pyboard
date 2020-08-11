@@ -17,17 +17,154 @@ function del(){
 		document.forms["form1"].submit();
 	}
 }
+    var tag = document.createElement('script');
+
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            videoId: '{{ video_key }}'
+        });
+    }
 </script>
 </head>
 <body>
 <h2>게시물 편집</h2>
 <form id="form1" name="form1" method="post" action="insert" enctype="multipart/form-data">
-<table border="1" width="700px">
+<table border="1" width="700px" style="align-content: center">
 	<tr><td>조회수</td><td>{{dto.hit}}</td></tr>
 	<tr><td>이름</td><td><input name="writer" value="{{dto.writer}}"></td></tr>
 	<tr><td>제목</td><td><input name="title" value="{{dto.title}}"></td></tr>
 	<tr><td>날짜</td><td>{{dto.post_date}}</td></tr>
+    <tr><td>분류</td><td>
+        {% if dto.section_school == "elementary" %}
+        <select name="section_school">
+            <option value="common">공통</option>
+            <option value="elementary" selected>초등</option>
+            <option value="middle">중등</option>
+            <option value="high">고등</option>
+        </select>
+        {% elif dto.section_school == "middle" %}
+        <select name="section_school">
+            <option value="common">공통</option>
+            <option value="elementary">초등</option>
+            <option value="middle" selected>중등</option>
+            <option value="high">고등</option>
+        </select>
+        {% elif dto.section_school == "high" %}
+        <select name="section_school">
+            <option value="common">공통</option>
+            <option value="elementary">초등</option>
+            <option value="middle">중등</option>
+            <option value="high" selected>고등</option>
+        </select>
+        {% else %}
+        <select name="section_school">
+            <option value="common" selected>공통</option>
+            <option value="elementary"초등</option>
+            <option value="middle">중등</option>
+            <option value="high">고등</option>
+        </select>
+        {% endif %}
+
+        {% if dto.section_subject == "korean" %}
+        <select name="section_subject">
+            <option value="common">공통</option>
+            <option value="korean" selected>국어</option>
+            <option value="math">수학</option>
+            <option value="social">사회</option>
+            <option value="science">과학</option>
+            <option value="english">영어</option>
+        </select>
+        {% elif dto.section_subject == "math" %}
+        <select name="section_subject">
+            <option value="common">공통</option>
+            <option value="korean">국어</option>
+            <option value="math" selected>수학</option>
+            <option value="social">사회</option>
+            <option value="science">과학</option>
+            <option value="english">영어</option>
+        </select>
+        {% elif dto.section_subject == "social" %}
+        <select name="section_subject">
+            <option value="common">공통</option>
+            <option value="korean">국어</option>
+            <option value="math">수학</option>
+            <option value="social" selected>사회</option>
+            <option value="science">과학</option>
+            <option value="english">영어</option>
+        </select>
+        {% elif dto.section_subject == "science" %}
+        <select name="section_subject">
+            <option value="common">공통</option>
+            <option value="korean">국어</option>
+            <option value="math">수학</option>
+            <option value="social">사회</option>
+            <option value="science" selected>과학</option>
+            <option value="english">영어</option>
+        </select>
+        {% elif dto.section_subject == "english" %}
+        <select name="section_subject">
+            <option value="common">공통</option>
+            <option value="korean">국어</option>
+            <option value="math">수학</option>
+            <option value="social">사회</option>
+            <option value="science">과학</option>
+            <option value="english" selected>영어</option>
+        </select>
+        {% else %}
+        <select name="section_subject">
+            <option value="common" selected>공통</option>
+            <option value="korean">국어</option>
+            <option value="math">수학</option>
+            <option value="social">사회</option>
+            <option value="science">과학</option>
+            <option value="english">영어</option>
+        </select>
+        {% endif %}
+
+        {% if dto.section_semester == "first" %}
+        <select name="section_semester">
+            <option value="common">공통</option>
+            <option value="first" selected>1학기</option>
+            <option value="second">2학기</option>
+        </select>
+        {% elif dto.section_semester == "second" %}
+        <select name="section_semester">
+            <option value="common">공통</option>
+            <option value="first">1학기</option>
+            <option value="second" selected>2학기</option>
+        </select>
+        {% else %}
+        <select name="section_semester">
+            <option value="common" selected>공통</option>
+            <option value="first">1학기</option>
+            <option value="second">2학기</option>
+        </select>
+        {% endif %}
+    </td></tr>
+    <tr>
+        <td>URL</td><td><input name="video_url" size="60" value="{{dto.video_url}}"><a href="{{ dto.video_url }}">{{ dto.video_url }}</a></td>
+    </tr>
 	<tr><td>내용</td><td><textarea rows="10" cols="60" name="content">{{dto.content}}</textarea></td></tr>
+    <tr>
+        <td>
+        </td>
+        <td>
+            {% if 'https://' in dto.video_url %}
+            <div class="row">
+                <div class="col-md-16">
+                    <div id="player"></div>
+                </div>
+            </div>
+            {% else %}
+                연결된 비디오가 없습니다
+            {% endif %}
+        </td>
+    </tr>
 	<tr><td>첨부파일</td>
 		<td>
 			{% if dto.filesize > 0 %}

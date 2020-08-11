@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>keyword</title>
+</head>
+<body>
+<h1>Youtube 검색</h1>
+<h2><a href="/">게시판</a>   <a href="/search_write">글쓰기</a></h2>
+<form method="post">
+    {% csrf_token %}
+    {% if youtube_items %}
+    입력하세요 : <input name="keyword" type="text" value="{{keyword}}">
+    <input type="submit" value="검색"><br>
+    {% for i in youtube_items %}
+        <input name="video)title" size="90" value="{{ i.snippet.title }}"><br>
+        <input name="video_id" size="90" value="https://youtu.be/{{ i.id.videoId }}"><br>
+        <textarea name="description" cols="80" rows="5">
+            {{ i.snippet.description }}
+        </textarea>
+    <img src="{{ i.snippet.thumbnail.default.url }}">
+        <input type="image" src="{{ i.snippet.thumbnails.default.url }}">
+    <div class="row">
+        <div class="col-md-16">
+            <div id="player"></div>
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
+</form>
+</body>
+</html>
+{% for i in youtube_items %}
+<script>
+    var tag = document.createElement('script');
+
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            videoId: '{{ i.id.videoId }}'
+        });
+    }
+</script>
+{% endfor %}

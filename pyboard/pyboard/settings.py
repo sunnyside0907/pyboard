@@ -12,13 +12,13 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from django.conf.locale.ko import formats as ko_formats
+
 ko_formats.DATETIME_FORMAT = 'Y-m-d g:i:s'
 import pymysql
 import MySQLdb
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -30,7 +30,6 @@ SECRET_KEY = 'r18jf5i#(c@z+(#821tpj8q5lvd8eqv9@01dmnx7r68zl=1rkx'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -74,25 +73,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pyboard.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-     #   'OPTIONS': {
-    #        'read_default_file': os.path.join(BASE_DIR,"mysql.cnf"),
-     #       'init_command': "SET sql_mode = 'STRICT_TRANS_TABLES'" #strict mode
-     #       }
         'NAME': 'board_py',
-        'USER' : 'root',
-        'PASSWORD' : '1234',
-        'HOST':'Localhost',
-        'PORT':'3306'
+        'USER': 'root',
+        'PASSWORD': '1234',
+        'HOST': 'Localhost',
+        'PORT': '3306',
+        'CHARSET': 'utf8mb4',
+        'OPTIONS': {
+                'read_default_file': os.path.join(BASE_DIR,"mysql.cnf"),
+                'charset':'utf8mb4',
+                'use_unicode': True,
+               'init_command': "SET sql_mode = 'STRICT_TRANS_TABLES'" #strict mode
+               }
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -112,7 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -125,7 +124,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

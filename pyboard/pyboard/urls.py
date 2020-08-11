@@ -26,5 +26,7 @@ urlpatterns = [
     path('detail',views.detail),
     path('update',views.update),
     path('delete',views.delete),
-    path("reply_insert",views.reply_insert),
+    path('reply_insert',views.reply_insert),
+    path('search_youtube',views.search_youtube),
+    path('search_write',views.search_insert)
 ]

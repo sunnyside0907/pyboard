@@ -16,7 +16,7 @@
 </style>
 </head>
 <body>
-<h2><a href="/">게시판</a></h2>
+<h2><a href="/">게시판</a>   <a href="/search_youtube">유튜브검색</a></h2>
 <form method="post">
 	{% csrf_token %}	<!-- 크로스사이트스크립팅 공격방지코드 -->
 		<select name="search_option">
@@ -67,7 +67,7 @@
 		{% if boardList %}
 		{% for row in boardList %}
 		<tr align="center">
-			<td>{{row.idx}}</td>
+			<td>{{ row.idx }}</td>
 			<td>{{row.writer}}</td>
 			<td><a href="detail?idx={{row.idx}}">{{row.title}}</a></td>
 			<td>{{row.post_date|date:"Y-m-d"}}</td>
@@ -104,7 +104,6 @@
 		</tr>
 
 	</table>
-
 </body>
 
 </html>

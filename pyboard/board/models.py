@@ -15,7 +15,10 @@ class Board(models.Model):
     filename = models.CharField(null=True, blank=True, default="", max_length=500)
     filesize = models.IntegerField(default=0)
     down = models.IntegerField(default=0)
-
+    video_url = models.URLField(null=True,max_length=100)
+    section_school = models.CharField(default="common",max_length=50)
+    section_subject = models.CharField(default="common",max_length=50)
+    section_semester = models.CharField(default="common",max_length=50)
 
     def hit_up(self):
         self.hit += 1
@@ -30,3 +33,8 @@ class Comment(models.Model):
     writer = models.CharField(null=False, max_length=50)
     content = models.TextField(null=False)
     post_date = models.DateTimeField(default=datetime.now, blank=True)
+
+class Video(models.Model):
+    video_id = models.CharField(null=False, max_length=100)
+    video_title = models.CharField(null=False, max_length=500)
+    description = models.CharField(null=False, max_length=500)
