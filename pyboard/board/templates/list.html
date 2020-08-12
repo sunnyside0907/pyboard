@@ -58,10 +58,10 @@
 		<tr style="background-color: yellow">
 			<th>번호</th>
 			<th>작성자</th>
+            <th>썸네일</th>
 			<th>제목</th>
 			<th>날짜</th>
 			<th>조회수</th>
-			<th>첨부파일</th>
 			<th>다운로드</th>
 		</tr>
 		{% if boardList %}
@@ -69,14 +69,15 @@
 		<tr align="center">
 			<td>{{ row.idx }}</td>
 			<td>{{row.writer}}</td>
+            <td>
+                <img src="{{ row.th_default }}">
+{#				{% if row.filesize > 0 %}<a href="download?idx={{row.idx}}">#}
+{#				<image src="{% static "images/file.png" %}"></a>#}
+{#				{% endif %}#}
+			</td>
 			<td><a href="detail?idx={{row.idx}}">{{row.title}}</a></td>
 			<td>{{row.post_date|date:"Y-m-d"}}</td>
 			<td>{{row.hit}}</td>
-			<td>
-				{% if row.filesize > 0 %}<a href="download?idx={{row.idx}}">
-				<image src="{% static "images/file.png" %}"></a>
-				{% endif %}
-			</td>
 			<td>{{row.down}}</td>
 		{% endfor %}
 		{% endif %}

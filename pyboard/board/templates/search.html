@@ -10,28 +10,25 @@
 <h2><a href="/">게시판</a>   <a href="/search_write">글쓰기</a></h2>
 <form method="post">
     {% csrf_token %}
-    {% if youtube_items %}
     입력하세요 : <input name="keyword" type="text" value="{{keyword}}">
     <input type="submit" value="검색"><br>
-    {% for i in youtube_items %}
-        <input name="video)title" size="90" value="{{ i.snippet.title }}"><br>
-        <input name="video_id" size="90" value="https://youtu.be/{{ i.id.videoId }}"><br>
+    {% for row in vlist %}
+        <input name="video_title" size="90" value="{{ row.video_title }}" autocomplete="off"><br>
+        <input name="video_id" size="90" value="https://youtu.be/{{ row.video_id }}"><br>
         <textarea name="description" cols="80" rows="5">
-            {{ i.snippet.description }}
+            {{ row.description }}
         </textarea>
-    <img src="{{ i.snippet.thumbnail.default.url }}">
-        <input type="image" src="{{ i.snippet.thumbnails.default.url }}">
-    <div class="row">
-        <div class="col-md-16">
-            <div id="player"></div>
-        </div>
-    </div>
+        <br><img src="{{ row.th_high }}" name="th_high"><br>
+    {#    <div class="row">#}
+    {#        <div class="col-md-16">#}
+    {#            <div id="player"></div>#}
+    {#        </div>#}
+    {#    </div>#}
     {% endfor %}
-{% endif %}
 </form>
 </body>
 </html>
-{% for i in youtube_items %}
+{% for row in vlist %}
 <script>
     var tag = document.createElement('script');
 
@@ -42,7 +39,7 @@
     var player;
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-            videoId: '{{ i.id.videoId }}'
+            videoId: '{{ row.video_id }}'
         });
     }
 </script>

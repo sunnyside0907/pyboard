@@ -134,7 +134,10 @@ def insert(request):
                 section_school=request.POST["section_school"],
                 section_subject=request.POST["section_subject"],
                 section_semester=request.POST["section_semester"],
-                grade=request.POST["grade"]
+                grade=request.POST["grade"],
+                th_high=request.POST["th_high"],
+                th_medium=request.POST["th_medium"],
+                th_default=request.POST["th_default"]
                 )
     dto.save()
 
@@ -223,11 +226,15 @@ def update(request):
                     section_school=request.POST["section_school"],
                     section_subject=request.POST["section_subject"],
                     section_semester=request.POST["section_semester"],
-                    grade=request.POST["grade"]
+                    grade=request.POST["grade"],
+                    th_high=request.POST["th_high"],
+                    th_medium=request.POST["th_medium"],
+                    th_default=request.POST["th_default"]
                     )
     dto_new.save()  # update query 호출
 
     return redirect("/")  # 시작페이지로 이ddong
+
 
 
 # 삭제하기
@@ -262,7 +269,7 @@ def reply_insert(request):
 # api 2 : AIzaSyCdFvZiU0BvUPE8sor8Os9ZdkiBA3DvhFY
 # api 3 : AIzaSyDaxVz4EWlhHvJH1VaQIv0P85rpEXyYNSU
 def search_youtube(request):
-    API_KEY = "AIzaSyDASAZfOrimhTwQ1g5F-4XquL_9uVT0n9Q"
+    API_KEY = "AIzaSyASxNB6hLN-lOnTfV-waBqtYd9u0Zo08T0"
     YOUTUBE_API_SERVICE_NAME = "youtube"
     YOUTUBE_API_VERSION = "v3"
 
@@ -271,70 +278,61 @@ def search_youtube(request):
     except:
         keyword = ""
 
-    url = 'https://www.googleapis.com/youtube/v3/search'
-    params = {
-        'key': API_KEY,
-        'part': 'snippet',
-        'type': 'video',
-        'maxResults': '1',
-        'q': keyword,
-    }
-    response = requests.get(url, params)
-    response_dict = response.json()
+    if keyword:
 
-    # data = response_dict['items']
+        url = 'https://www.googleapis.com/youtube/v3/search'
+        params = {
+            'key': API_KEY,
+            'part': 'snippet',
+            'type': 'video',
+            'maxResults': '3',
+            'q': keyword,
+        }
+        response = requests.get(url, params)
+        response_dict = response.json()
 
-    # snippet = data['snippet']
-    # title = snippet['title']
-    # youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=API_KEY)
+        Video.objects.all().delete()
 
-    Video.objects.all().delete()
+        for items in response_dict['items']:
+            # print(items)
+            print("########")
+            title = items['snippet']['title']
+            print("title : "+title)
+            video_id = items['id']['videoId']
+            print("id : "+video_id)
+            description = items['snippet']['description']
+            print("desc : "+description)
+            print("########")
+            th_high = items['snippet']['thumbnails']['high']['url']
+            th_default = items['snippet']['thumbnails']['default']['url']
+            th_medium = items['snippet']['thumbnails']['default']['url']
 
-    for items in response_dict['items']:
-        # print(items)
-        print("########")
-        title = items['snippet']['title']
-        print("title : "+title)
-        video_id = items['id']['videoId']
-        print("id : "+video_id)
-        description = items['snippet']['description']
-        print("desc : "+description)
-        print("########")
-        thumbnail = items['snippet']['thumbnails']
+            dto = Video(video_id=video_id, video_title=title, description=description, th_high=th_high, th_default=th_default, th_medium=th_medium)
+            dto.save()
 
-        dto = Video(video_id=video_id, video_title=title, description=description)
-        dto.save()
-
-        """
-        # id가 이미 존재한다면 저장 안함
         videolist = Video.objects.all()
-        for i in videolist:
-            if video_id.find(i.video_id) :
-                print("***")
-                break
-            elif not video_id.find(i.video_id):
-                print("@@@")
-                dto.save()
-                break
-            else:
-                print("OOOO")     
-        """
-    #videolist = Video.objects.all()
 
 
-    context = {
-        'youtube_items': response_dict['items'],
-        'title':title,
-        'video_id':video_id,
-        'description':description,
-        'keyword':keyword
-    }
+        context = {
+            'youtube_items': response_dict['items'],
+            'title':title,
+            'video_id':video_id,
+            'description':description,
+            'keyword':keyword,
+            'th_high':th_high,
+            'vlist': videolist,
+        }
+    else:
+        context = {
+            'youtube_items': [], 'title': None, 'video_id': None, 'description': None, 'keyword': ""
+        }
+
     return render(request, 'search.html', context)
 
 def search_insert(request) :
     videolist = Video.objects.all()
-    for i in videolist:
-        vid = i.video_id
+    for row in videolist:
+        vid = row.video_id
     print(vid)
     vlist = Video.objects.get(video_id=vid)
     fname = ""
@@ -348,61 +346,8 @@ def search_insert(request) :
             fp.write(chunk)
             fp.close()
 
-    #dto = Board(writer=request.POST["writer"], title=request.POST["title"],
-     #           content=request.POST["content"], filename=fname, filesize=fsize,
-      #          video_url=request.POST["video_url"],
-       #         section_school=request.POST["section_school"],
-        #        section_subject=request.POST["section_subject"],
-         #       section_semester=request.POST["section_semester"]
-          #      )
-    #dto.save()
-    #print(dto)  # update query 호출
 
     context = {
-        'vist': vlist,
-        'title': vlist.video_title,
-        'video_id': vlist.video_id,
-        'description': vlist.description,
+        'vlist': vlist
     }
     return render(request, 'search_write.html', context)
-
-"""
-    
-    
-    
-    
-    
-    
-    youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=API_KEY)
-
-    search_response = youtube.search().list(
-        q=keyword,
-        part="snippet",
-        # order="date",
-        maxResults=5
-    ).execute()
-
-    videos = []
-    title = []
-    video_url = []
-    videolist = []
-    baseurl = 'youtu.be/'
-
-    for search_result in search_response.get("items", []):
-        if search_result["id"]["kind"] == "youtube#video":
-            videos.append("제목:\t%s\nid :\t%s\n설명 :\t%s\n##########\n" % (search_result["snippet"]["title"],
-                                                                         search_result["id"]["videoId"],
-                                                                         search_result["snippet"]["description"]))
-
-            title.append(search_result["snippet"]["title"])
-            video_url.append(baseurl + search_result["id"]["videoId"])
-            # print("{0}\n{1}\n".format(title, video_url))
-
-    context = {
-        'youtube_items': search_result,
-        'video_title':title,
-        'video_url':video_url,
-        'videolist':videolist
-    }
-    return render(request, 'search.html', context)
-"""

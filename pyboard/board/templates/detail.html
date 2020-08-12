@@ -36,8 +36,8 @@ function del(){
 <form id="form1" name="form1" method="post" action="insert" enctype="multipart/form-data">
 <table border="1" width="700px" style="align-content: center">
 	<tr><td>조회수</td><td>{{dto.hit}}</td></tr>
-	<tr><td>작성자</td><td><input name="writer" value="{{dto.writer}}"></td></tr>
-	<tr><td>제목</td><td><input name="title" value="{{dto.title}}"></td></tr>
+	<tr><td>작성자</td><td><input name="writer" size="100" value="{{dto.writer}}"></td></tr>
+	<tr><td>제목</td><td><input name="title" size="100" value="{{dto.title}}"></td></tr>
 	<tr><td>날짜</td><td>{{dto.post_date}}</td></tr>
     <tr><td>분류</td><td>
         {% if dto.section_school == "elementary" %}
@@ -219,8 +219,18 @@ function del(){
         {% endif %}
     </td></tr>
     <tr>
-        <td>URL</td><td><input name="video_url" size="60" value="{{dto.video_url}}"><a href="{{ dto.video_url }}">{{ dto.video_url }}</a></td>
+        <td>URL</td><td><input name="video_url" size="100" value="{{dto.video_url}}"></td>
     </tr>
+    <tr>
+        <td>Thumbnail</td>
+        <td>
+            <img name="th_high" src="{{ dto.th_high }}">
+            <input type="hidden" name="th_high" value="{{ dto.th_high }}">
+            <input type="hidden" name="th_medium" value="{{ dto.th_medium }}">
+            <input type="hidden" name="th_default" value="{{ dto.th_default }}">
+        </td>
+    </tr>
+
 	<tr><td>내용</td><td><textarea rows="10" cols="60" name="content">{{dto.content}}</textarea></td></tr>
     <tr>
         <td>
@@ -237,15 +247,15 @@ function del(){
             {% endif %}
         </td>
     </tr>
-	<tr><td>첨부파일</td>
-		<td>
-			{% if dto.filesize > 0 %}
-				<a href="download?idx={{dto.idx}}">
-				{{dto.filename}} ({{filesize}}KB)</a>
-			{% endif %}
-			<input type="file" name="file">
-		</td>
-	</tr>
+{#	<tr><td>첨부파일</td>#}
+{#		<td>#}
+{#			{% if dto.filesize > 0 %}#}
+{#				<a href="download?idx={{dto.idx}}">#}
+{#				{{dto.filename}} ({{filesize}}KB)</a>#}
+{#			{% endif %}#}
+{#			<input type="file" name="file">#}
+{#		</td>#}
+{#	</tr>#}
 	
 	<tr><td colspan="2" align="center">
 		<input type="hidden" name="idx" value="{{dto.idx}}">
@@ -271,6 +281,5 @@ function del(){
 	</td></tr>
 	{% endfor %}
 </table>
-
 </body>
 </html>

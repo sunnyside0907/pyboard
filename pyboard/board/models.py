@@ -20,6 +20,9 @@ class Board(models.Model):
     section_subject = models.CharField(default="common", max_length=50)
     section_semester = models.CharField(default="common", max_length=50)
     grade = models.CharField(default="0", max_length=10)
+    th_high = models.CharField(default=0,max_length=100)
+    th_default = models.CharField(default=0,max_length=100)
+    th_medium = models.CharField(default=0,max_length=100)
 
     def hit_up(self):
         self.hit += 1
@@ -41,3 +44,6 @@ class Video(models.Model):
     video_id = models.CharField(null=False, max_length=100)
     video_title = models.CharField(null=False, max_length=500)
     description = models.CharField(null=False, max_length=500)
+    th_high = models.CharField(null=True, max_length=100)
+    th_default = models.CharField(default=0, max_length=100)
+    th_medium = models.CharField(default=0, max_length=100)
